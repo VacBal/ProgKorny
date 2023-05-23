@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ToDo App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: rgb(2, 0, 36);
+        background: linear-gradient(
+          47deg,
+          rgba(2, 0, 36, 1) 0%,
+          rgba(9, 9, 121, 1) 50%,
+          rgba(0, 129, 156, 1) 90%
+        );
+        margin: 0;
+        padding: 0;
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      h1 {
+        margin-top: 5dvh;
+        color: white;
+        font-size: clamp(50px, 4dvw, 100px);
+        margin-bottom: 0px;
+      }
+      h1 span {
+        color: green;
+      }
+      h2 {
+        color: wheat;
+        font-size: clamp(25px, 3dvw, 50px);
+        text-align: center;
+        width: clamp(300px, 60%, 1000px);
+        margin-bottom: clamp(50px, 10dvh, 170px);
+      }
+      form {
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        gap: clamp(10px, 2dvh, 20px);
+      }
+      .titleInput {
+        font-size: clamp(25px, 3dvw, 50px);
+        padding: 1vh clamp(10px, 3dvw, 15px);
+        width: clamp(300px, 60%, 1000px);
+        background-color: transparent;
+        border: clamp(2px, 1dvw, 5px) solid green;
+        border-radius: 10px;
+        color: white;
+      }
+      .titleInput:focus {
+        outline: none;
+      }
+      .titleInput::placeholder {
+        /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: wheat;
+        opacity: 1; /* Firefox */
+      }
+
+      .titleInput:-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        color: wheat;
+      }
+
+      .titleInput::-ms-input-placeholder {
+        /* Microsoft Edge */
+        color: wheat;
+      }
+      button {
+        font-size: clamp(25px, 3dvw, 50px);
+        padding: 1vh clamp(30px, 3dvw, 100px);
+        background-color: green;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      ul {
+        padding: 0;
+        margin-bottom: 5dvh;
+      }
+      li {
+        list-style: none;
+        width: clamp(300px, 60dvw, 910px);
+        font-size: clamp(18px, 1.5dvw, 50px);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1vh clamp(10px, 3dvw, 15px);
+        color: wheat;
+        gap: clamp(10px, 2dvh, 20px);
+        border-bottom: 1px solid wheat;
+        padding: clamp(30px, 5dvh, 60px) 10px;
+      }
+      .completed {
+        color: green;
+      }
+      .title {
+        text-decoration: none;
+        color: inherit;
+      }
+      .deleteButton {
+        text-decoration: none;
+        color: white;
+        background-color: red;
+        border: none;
+        border-radius: 10px;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 0.5vh clamp(20px, 1dvw, 50px);
+      }
+      .separator {
+        width: clamp(340px, 60%, 1000px);
+        margin: clamp(30px, 5dvh, 60px) 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1><span>ToDo</span> App</h1>
+    <h2>Click on ToDo title to change status.</h2>
+
+    <hr class="separator" />
+    <form action="/create" method="post">
+      <input
+        class="titleInput"
+        type="text"
+        name="title"
+        placeholder="Enter ToDo title"
+      />
+      <button type="submit">Add</button>
+    </form>
+    <hr class="separator" />
+    <ul>
+      <li
+        th:each="todo : ${todoList}"
+        th:class="${todo.getIsCompleted() ? 'completed' : ''}"
+      >
+        <a class="title" th:href="@{/{id}/toggle(id=${todo.getId()})}"
+          ><span th:text="${todo.title}"></span
+        ></a>
+        <a class="deleteButton" th:href="@{/{id}/delete(id=${todo.getId()})}"
+          >Delete</a
+        >
+      </li>
+    </ul>
+  </body>
+</html>
